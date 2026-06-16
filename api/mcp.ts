@@ -117,7 +117,10 @@ function buildServer(geminiKey: string): McpServer {
 export default async function handler(req: IncomingMessage, res: ServerResponse): Promise<void> {
   const geminiKey = getGeminiKey(req);
   const mcpServer = buildServer(geminiKey);
-  const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+  const transport = new StreamableHTTPServerTransport({
+    sessionIdGenerator: undefined,
+    enableJsonResponse: true,
+  });
   await mcpServer.connect(transport);
   await transport.handleRequest(req, res);
 }
