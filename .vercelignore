@@ -1,6 +1,5 @@
 .env
 scripts/
-src/
 supabase/
 node_modules/
 dist/
