@@ -10,7 +10,7 @@
   ],
   "routes": [
     { "src": "/api/mcp", "dest": "/api/mcp.ts" },
-    { "src": "/.well-known/oauth-protected-resource", "dest": "/api/oauth-protected-resource.ts" },
+    { "src": "/.well-known/oauth-protected-resource(?:/.*)?$", "dest": "/api/oauth-protected-resource.ts" },
     { "src": "/.well-known/oauth-authorization-server", "dest": "/api/oauth-authorization-server.ts" },
     { "src": "/register", "dest": "/api/register.ts" },
     { "src": "/authorize", "dest": "/api/authorize.ts" },
