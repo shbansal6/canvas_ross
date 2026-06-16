@@ -115,6 +115,12 @@ function buildServer(geminiKey: string): McpServer {
 }
 
 export default async function handler(req: IncomingMessage, res: ServerResponse): Promise<void> {
+  // MCP SDK validates Accept includes text/event-stream, but Claude.ai's connector omits it.
+  // We already force JSON (enableJsonResponse: true), so just satisfy the check.
+  if (!req.headers['accept']?.includes('text/event-stream')) {
+    req.headers['accept'] = 'application/json, text/event-stream';
+  }
+
   const geminiKey = getGeminiKey(req);
   const mcpServer = buildServer(geminiKey);
   const transport = new StreamableHTTPServerTransport({
