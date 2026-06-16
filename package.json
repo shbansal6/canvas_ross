@@ -2,7 +2,6 @@
   "name": "ross-course-base",
   "version": "1.0.0",
   "description": "MCP knowledge server for Ross MBA Canvas course materials",
-  "type": "module",
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit",
