@@ -115,10 +115,16 @@ function buildServer(geminiKey: string): McpServer {
 }
 
 export default async function handler(req: IncomingMessage, res: ServerResponse): Promise<void> {
-  // MCP SDK validates Accept includes text/event-stream, but Claude.ai's connector omits it.
-  // We already force JSON (enableJsonResponse: true), so just satisfy the check.
+  // MCP SDK (via Hono) reads rawHeaders, not req.headers. Claude.ai's connector doesn't send
+  // text/event-stream in Accept. Patch both so the 406 check passes.
   if (!req.headers['accept']?.includes('text/event-stream')) {
     req.headers['accept'] = 'application/json, text/event-stream';
+    const idx = req.rawHeaders.findIndex((h, i) => i % 2 === 0 && h.toLowerCase() === 'accept');
+    if (idx >= 0) {
+      req.rawHeaders[idx + 1] = 'application/json, text/event-stream';
+    } else {
+      req.rawHeaders.push('Accept', 'application/json, text/event-stream');
+    }
   }
 
   const geminiKey = getGeminiKey(req);
